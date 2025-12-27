@@ -1,14 +1,14 @@
 <?php
-// Enable full error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // Start session
 session_start();
 
-require_once '../includes/db_connect.php';
+// Redirect if already logged in
+if (isset($_SESSION['user_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
 
-$debug_message = "";
+require_once '../includes/db_connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
@@ -16,9 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-    
-    // Debug 1: Check inputs
-    // $debug_message .= "Input User: [" . htmlspecialchars($username) . "]<br>";
     
     $query = "SELECT * FROM users WHERE username = :username LIMIT 1";
     $stmt = $db->prepare($query);
@@ -28,22 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->rowCount() > 0) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Debug 2: Check Hash
-        // $debug_message .= "DB Hash: [" . $row['password'] . "]<br>";
-        
         if (password_verify($password, $row['password'])) {
             // Login Success
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['role'] = $row['role'];
             $_SESSION['username'] = $row['username'];
             
-            // Force save session
-            session_write_close();
-            
-            // Debug 3: Link instead of header to see if it works
-            // echo "Login Verified! <a href='dashboard.php'>Click to go to Dashboard</a>";
-            // exit();
-
             header("Location: dashboard.php");
             exit();
         } else {
@@ -58,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login - InterioM</title>
+    <title>Admin Login - Spaces by KD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .login-bg {
@@ -75,15 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="relative z-10 w-full max-w-sm bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-gray-200">
         <div class="p-8">
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold font-serif text-gray-900">Interio<span class="text-yellow-600">M</span></h1>
+                <img src="../assest/logo.png" alt="Logo" class="h-16 w-auto mx-auto rounded-md mb-2">
+                <h1 class="text-2xl font-bold font-serif text-gray-900">Spaces by KD</h1>
                 <p class="text-gray-500 text-sm mt-2">Admin Control Panel</p>
             </div>
-            
-            <?php if(!empty($debug_message)): ?>
-                <div class="bg-blue-100 text-blue-800 p-3 rounded mb-4 text-xs font-mono">
-                    <?php echo $debug_message; ?>
-                </div>
-            <?php endif; ?>
 
             <?php if(isset($error)): ?>
                 <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">

@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php
+require_once 'includes/db_connect.php';
+include 'includes/header.php';
+?>
 
 <!-- Page Header (Split Layout) -->
 <div class="relative bg-white pt-32 pb-16">
@@ -62,26 +65,61 @@
             
             <!-- Form Section -->
             <div class="lg:w-2/3 p-12 bg-white">
-                <form action="#" method="POST" class="space-y-8">
+                <?php
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    try {
+                        // Assuming header.php might not have connected yet, but usually we do it inside.
+                        // However, let's play safe and create new connection for this logic block or reuse if variable exists.
+                        if(!isset($conn)) {
+                             $db_instance = new Database();
+                             $conn = $db_instance->getConnection();
+                        }
+
+                        $fname = trim($_POST['first_name']);
+                        $lname = trim($_POST['last_name']);
+                        $fullname = $fname . ' ' . $lname;
+                        $email = trim($_POST['email']);
+                        $projectType = $_POST['project_type'];
+                        $msg = trim($_POST['message']);
+                        
+                        // Combine project type into message for context
+                        $full_message = "Project Type: $projectType\n\n" . $msg;
+
+                        $stmt = $conn->prepare("INSERT INTO inquiries (name, contact_info, message, source, status) VALUES (:name, :contact, :msg, 'website_form', 'new')");
+                        $stmt->bindParam(':name', $fullname);
+                        $stmt->bindParam(':contact', $email);
+                        $stmt->bindParam(':msg', $full_message);
+                        
+                        if ($stmt->execute()) {
+                            echo '<div class="bg-green-100 text-green-700 p-4 mb-6 rounded-lg">Thank you! Your message has been sent successfully.</div>';
+                        } else {
+                            echo '<div class="bg-red-100 text-red-700 p-4 mb-6 rounded-lg">Sorry, failed to send message. Please try again.</div>';
+                        }
+                    } catch (Exception $e) {
+                         echo '<div class="bg-red-100 text-red-700 p-4 mb-6 rounded-lg">Error: ' . $e->getMessage() . '</div>';
+                    }
+                }
+                ?>
+                <form action="" method="POST" class="space-y-8">
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">First Name</label>
-                            <input type="text" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="John">
+                            <input type="text" name="first_name" required class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="John">
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
-                            <input type="text" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="Doe">
+                            <input type="text" name="last_name" required class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="Doe">
                         </div>
                      </div>
                      
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                          <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Email</label>
-                            <input type="email" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="john@example.com">
+                            <input type="email" name="email" required class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="john@example.com">
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Project Type</label>
-                            <select class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md">
+                            <select name="project_type" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md">
                                 <option>Residential Design</option>
                                 <option>Commercial Office</option>
                                 <option>Renovation</option>
@@ -92,11 +130,11 @@
                      
                      <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">Message</label>
-                        <textarea rows="4" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="Tell us about your project..."></textarea>
+                        <textarea name="message" required rows="4" class="w-full bg-gray-50 border-b-2 border-gray-200 focus:border-accent outline-none py-3 px-4 transition-colors rounded-t-md" placeholder="Tell us about your project..."></textarea>
                     </div>
                     
                     <div class="flex justify-end">
-                        <button type="button" class="px-10 py-4 bg-primary text-white font-bold rounded-sm shadow-xl hover:bg-accent transition-colors transform hover:-translate-y-1" onclick="alert('Message Sent!')">Send Message</button>
+                        <button type="submit" class="px-10 py-4 bg-primary text-white font-bold rounded-sm shadow-xl hover:bg-accent transition-colors transform hover:-translate-y-1">Send Message</button>
                     </div>
                 </form>
             </div>
@@ -109,4 +147,25 @@
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869402!2d-74.119763973046!3d40.69766374874431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1684490000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0; filter: grayscale(100%);" allowfullscreen="" loading="lazy"></iframe>
 </section>
 
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Animate Contact Sidebar
+    gsap.from(".lg\\:w-1\\/3", {
+        scrollTrigger: { trigger: ".shadow-xl", start: "top 75%" },
+        x: -80, opacity: 0, duration: 1.2, ease: "power3.out"
+    });
+    
+    // Animate Form
+    gsap.from(".lg\\:w-2\\/3", {
+        scrollTrigger: { trigger: ".shadow-xl", start: "top 75%" },
+        x: 80, opacity: 0, duration: 1.2, delay: 0.2, ease: "power3.out"
+    });
+    
+    // Stagger Inputs
+    gsap.from("input, select, textarea", {
+        scrollTrigger: { trigger: "form", start: "top 80%" },
+        y: 30, opacity: 0, stagger: 0.1, duration: 0.8, ease: "back.out(1.2)"
+    });
+</script>
 <?php include 'includes/footer.php'; ?>

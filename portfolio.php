@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php
+require_once 'includes/db_connect.php';
+include 'includes/header.php';
+?>
 
 <!-- Page Header (Short) -->
 <div class="bg-primary py-20">
@@ -22,71 +25,45 @@
         <!-- Masonry-like Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
             
-            <!-- Item 1: Residential -->
-            <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="residential">
-                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Project" class="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+            <?php
+            // Fetch All Projects
+            try {
+                $db_obj = new Database();
+                $db = $db_obj->getConnection();
+                $stmt = $db->query("SELECT * FROM projects ORDER BY created_at DESC");
+                $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch(PDOException $e) { $projects = []; }
+
+            if(count($projects) > 0):
+                foreach($projects as $p):
+                    $imgSrc = !empty($p['image_path']) ? 'uploads/' . $p['image_path'] : 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            ?>
+            <!-- Dynamic Item -->
+            <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="<?php echo htmlspecialchars($p['category']); ?>">
+                <img src="<?php echo htmlspecialchars($imgSrc); ?>" alt="<?php echo htmlspecialchars($p['title']); ?>" class="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
-                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Modern Villa</h3>
-                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Beverly Hills</p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Details</button>
+                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300"><?php echo htmlspecialchars($p['title']); ?></h3>
+                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 line-clamp-2"><?php echo htmlspecialchars($p['description']); ?></p>
+                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Project</button>
                 </div>
             </div>
-
-            <!-- Item 2: Commercial -->
-             <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="commercial">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Project" class="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105">
-                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
-                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Tech HQ</h3>
-                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">San Francisco</p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Details</button>
-                </div>
-            </div>
-
-            <!-- Item 3: Hospitality -->
-             <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="hospitality">
-                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Project" class="w-full h-[450px] object-cover transition-transform duration-700 group-hover:scale-105">
-                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
-                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">The Grand Cafe</h3>
-                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Paris</p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Details</button>
-                </div>
-            </div>
-
-             <!-- Item 4: Residential -->
-             <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="residential">
-                <img src="https://images.unsplash.com/photo-1616137466211-f939a420be84?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Project" class="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105">
-                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
-                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Minimalist Apt</h3>
-                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Tokyo</p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Details</button>
-                </div>
-            </div>
-
-            <!-- Item 5: Commercial -->
-             <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="commercial">
-                <img src="https://images.unsplash.com/photo-1504384308090-c54be3852f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Project" class="w-full h-[480px] object-cover transition-transform duration-700 group-hover:scale-105">
-                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
-                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Creative Hub</h3>
-                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">London</p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Details</button>
-                </div>
-            </div>
-            
-             <!-- Item 6: Residential (Detailed) -->
-             <div class="portfolio-item group relative overflow-hidden rounded-xl shadow-lg cursor-pointer" data-category="residential">
-                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Project" class="w-full h-[420px] object-cover transition-transform duration-700 group-hover:scale-105">
-                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
-                    <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Dining Hall Renovation</h3>
-                    <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">New York</p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Details</button>
-                </div>
-            </div>
+            <?php endforeach; else: ?>
+                <div class="col-span-3 text-center text-gray-500 py-10">No projects found. Please add some from the Admin Panel.</div>
+            <?php endif; ?>
 
         </div>
     </div>
 </section>
 
 <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initial Stagger
+    gsap.from(".portfolio-item", {
+        scrollTrigger: { trigger: "#portfolio-grid", start: "top 85%" },
+        y: 60, opacity: 0, stagger: 0.1, duration: 0.8, ease: "back.out(1.2)"
+    });
+
     // Filter Logic
     const filterBtns = document.querySelectorAll('.filter-btn');
     const portfolioItems = document.querySelectorAll('.portfolio-item');
@@ -105,14 +82,17 @@
             
             portfolioItems.forEach(item => {
                 const category = item.getAttribute('data-category');
+                const matches = value === 'all' || category === value;
                 
-                if (value === 'all' || category === value) {
-                    item.style.display = 'block';
-                    gsap.to(item, {opacity: 1, scale: 1, duration: 0.4, ease: "power2.out"});
+                if (matches) {
+                    if(item.style.display === 'none') {
+                        item.style.display = 'block';
+                        gsap.fromTo(item, {scale: 0.8, opacity: 0}, {scale: 1, opacity: 1, duration: 0.5, ease: "power2.out"});
+                    }
                 } else {
-                    gsap.to(item, {opacity: 0, scale: 0.8, duration: 0.4, ease: "power2.in", onComplete: () => {
-                        item.style.display = 'none';
-                    }});
+                    if(item.style.display !== 'none') {
+                         gsap.to(item, {scale: 0.8, opacity: 0, duration: 0.3, onComplete: () => item.style.display = 'none'});
+                    }
                 }
             });
         });

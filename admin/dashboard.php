@@ -7,13 +7,44 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $role = $_SESSION['role']; // 'admin' or 'sub-admin'
+
+require_once '../includes/db_connect.php';
+
+try {
+    $database = new Database();
+    $db = $database->getConnection();
+
+    // 1. Count Ongoing Projects
+    $stmt = $db->query("SELECT COUNT(*) FROM projects WHERE category = 'ongoing'");
+    $ongoing_projects = $stmt->fetchColumn();
+
+    // 2. Count Completed Projects
+    $stmt = $db->query("SELECT COUNT(*) FROM projects WHERE category = 'completed'");
+    $completed_projects = $stmt->fetchColumn();
+
+    // 3. Count New Inquiries
+    $stmt = $db->query("SELECT COUNT(*) FROM inquiries WHERE status = 'new'");
+    $new_inquiries = $stmt->fetchColumn();
+
+    // 4. Count Testimonials (Happy Clients)
+    // Assuming all testimonials are happy clients for now
+    $stmt = $db->query("SELECT COUNT(*) FROM testimonials");
+    $happy_clients = $stmt->fetchColumn();
+
+} catch (Exception $e) {
+    // Fallback if DB fails
+    $ongoing_projects = 0;
+    $completed_projects = 0;
+    $new_inquiries = 0;
+    $happy_clients = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - InterioM</title>
+    <title>Admin Dashboard - Spaces by KD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -22,8 +53,8 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1a1a1a',
-                        accent: '#c0a062',
+                        primary: '#1b75bc',
+                        accent: '#fbb040',
                     }
                 }
             }
@@ -35,7 +66,10 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
         <!-- Sidebar -->
         <div class="bg-primary text-white w-64 flex-shrink-0 flex flex-col transition-all duration-300">
             <div class="p-6 border-b border-gray-700">
-                <h1 class="text-2xl font-bold font-serif">Interio<span class="text-accent">M</span></h1>
+                <div class="flex items-center space-x-2 mb-2">
+                    <img src="../assest/new_logo.png" alt="Logo" class="h-12 w-auto bg-white/10 rounded p-0.5">
+                    <h1 class="text-xl font-bold font-serif">Spaces by KD</h1>
+                </div>
                 <p class="text-xs text-gray-400 mt-1">Role: <?php echo ucfirst($role); ?></p>
             </div>
             
@@ -49,19 +83,19 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                     </li>
                     <li class="pt-4 pb-2 text-xs text-gray-500 uppercase font-semibold">Content Management</li>
                     <li>
-                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
+                        <a href="projects.php" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
                             <i class="fas fa-project-diagram w-5"></i>
                             <span>Projects</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
+                        <a href="testimonials.php" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
                             <i class="fas fa-star w-5"></i>
                             <span>Testimonials</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
+                        <a href="success_stories.php" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
                             <i class="fas fa-trophy w-5"></i>
                             <span>Success Stories</span>
                         </a>
@@ -69,27 +103,31 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                     
                     <li class="pt-4 pb-2 text-xs text-gray-500 uppercase font-semibold">CRM</li>
                     <li>
-                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
+                        <a href="inquiries.php" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
                             <i class="fas fa-envelope-open-text w-5"></i>
                             <span>Inquiries</span>
-                            <span class="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-auto">3 New</span>
+                            <?php if($new_inquiries > 0): ?>
+                                <span class="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-auto"><?php echo $new_inquiries; ?> New</span>
+                            <?php endif; ?>
                         </a>
                     </li>
 
                     <?php if($role == 'admin'): ?>
                     <li class="pt-4 pb-2 text-xs text-gray-500 uppercase font-semibold">Administration</li>
                     <li>
-                        <a href="#" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
+                        <a href="users.php" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
                             <i class="fas fa-users-cog w-5"></i>
                             <span>User Roles</span>
                         </a>
                     </li>
+                    <!--
                     <li>
                         <a href="#" class="flex items-center space-x-3 text-gray-300 hover:bg-gray-800 hover:text-white px-4 py-2 rounded-md transition-colors">
                             <i class="fas fa-file-invoice w-5"></i>
                             <span>Progress Reports</span>
                         </a>
                     </li>
+                    -->
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -117,7 +155,7 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Ongoing Projects</p>
-                                <p class="text-2xl font-semibold text-gray-700">12</p>
+                                <p class="text-2xl font-semibold text-gray-700"><?php echo $ongoing_projects; ?></p>
                             </div>
                         </div>
                     </div>
@@ -129,7 +167,7 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Completed Projects</p>
-                                <p class="text-2xl font-semibold text-gray-700">45</p>
+                                <p class="text-2xl font-semibold text-gray-700"><?php echo $completed_projects; ?></p>
                             </div>
                         </div>
                     </div>
@@ -141,7 +179,7 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">New Inquiries</p>
-                                <p class="text-2xl font-semibold text-gray-700">28</p>
+                                <p class="text-2xl font-semibold text-gray-700"><?php echo $new_inquiries; ?></p>
                             </div>
                         </div>
                     </div>
@@ -153,7 +191,7 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Happy Clients</p>
-                                <p class="text-2xl font-semibold text-gray-700">150+</p>
+                                <p class="text-2xl font-semibold text-gray-700"><?php echo $happy_clients; ?></p>
                             </div>
                         </div>
                     </div>
@@ -196,7 +234,7 @@ $role = $_SESSION['role']; // 'admin' or 'sub-admin'
                 datasets: [{
                     label: 'Projects Completed',
                     data: [2, 3, 5, 2, 4, 6],
-                    backgroundColor: '#c0a062',
+                    backgroundColor: '#fbb040',
                     borderRadius: 4
                 }, {
                     label: 'New Projects Started',

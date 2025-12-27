@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php
+require_once 'includes/db_connect.php';
+include 'includes/header.php';
+?>
 
 <!-- Page Header -->
 <div class="relative bg-primary py-32 overflow-hidden">
