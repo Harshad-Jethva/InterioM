@@ -84,12 +84,12 @@ include 'includes/header.php';
             <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">Consultation</h3>
                 <p class="text-gray-500 mb-6">For DIY enthusiasts</p>
-                <div class="text-4xl font-bold text-accent mb-6">$199<span class="text-sm text-gray-400 font-normal">/room</span></div>
+                <div class="text-4xl font-bold text-accent mb-6 font-bungee">$199<span class="text-sm text-gray-400 font-normal font-sans">/room</span></div>
                 <ul class="space-y-4 mb-8 text-left text-gray-600 text-sm px-4">
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> 2 Hour Consultation</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Color Palette Selection</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Furniture Placement Advice</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Shopping List</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> 2 Hour Consultation</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Color Palette Selection</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Furniture Placement Advice</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Shopping List</li>
                 </ul>
                 <a href="contact.php" class="block w-full py-3 border border-primary text-primary font-bold rounded-sm hover:bg-primary hover:text-white transition-colors">Select Plan</a>
             </div>
@@ -99,12 +99,12 @@ include 'includes/header.php';
                  <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-accent text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Most Popular</div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">Design Suite</h3>
                 <p class="text-gray-500 mb-6">Complete visual plan</p>
-                <div class="text-4xl font-bold text-accent mb-6">$899<span class="text-sm text-gray-400 font-normal">/room</span></div>
+                <div class="text-4xl font-bold text-accent mb-6 font-bungee">$899<span class="text-sm text-gray-400 font-normal font-sans">/room</span></div>
                 <ul class="space-y-4 mb-8 text-left text-gray-600 text-sm px-4">
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Everything in Consultation</li>
-                     <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> 3D Renderings (2 views)</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Detailed Floor Plans</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Fabric & Material Samples</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Everything in Consultation</li>
+                     <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> 3D Renderings (2 views)</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Detailed Floor Plans</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Fabric & Material Samples</li>
                 </ul>
                 <a href="contact.php" class="block w-full py-3 bg-accent text-white font-bold rounded-sm hover:bg-yellow-600 transition-colors">Select Plan</a>
             </div>
@@ -113,12 +113,12 @@ include 'includes/header.php';
              <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                 <h3 class="text-2xl font-bold text-gray-800 mb-2">Turnkey</h3>
                 <p class="text-gray-500 mb-6">We handle everything</p>
-                <div class="text-4xl font-bold text-accent mb-6">Custom</div>
+                <div class="text-4xl font-bold text-accent mb-6 font-bungee">Custom</div>
                 <ul class="space-y-4 mb-8 text-left text-gray-600 text-sm px-4">
-                     <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> End-to-End Management</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Contractor Procurement</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Daily Site Supervision</li>
-                    <li class="flex items-start"><i class="fas fa-check text-green-500 mt-1 mr-3"></i> Final Styling & Handover</li>
+                     <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> End-to-End Management</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Contractor Procurement</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Daily Site Supervision</li>
+                    <li class="flex items-start"><i class="fas fa-check text-pacific-blue mt-1 mr-3"></i> Final Styling & Handover</li>
                 </ul>
                 <a href="contact.php" class="block w-full py-3 border border-primary text-primary font-bold rounded-sm hover:bg-primary hover:text-white transition-colors">Contact Us</a>
             </div>

@@ -17,9 +17,11 @@ include 'includes/header.php';
         <!-- Filters (Styled) -->
         <div class="flex justify-center flex-wrap gap-4 mb-16">
             <button class="filter-btn active px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="all">All Works</button>
-            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="residential">Residential</button>
-            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="commercial">Commercial</button>
-            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="hospitality">Hospitality</button>
+            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="Residential">Residential</button>
+            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="Commercial">Commercial</button>
+            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="Turnkey">Turnkey</button>
+            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="Consultancy">Consultancy</button>
+            <button class="filter-btn px-8 py-3 rounded-full border border-gray-200 text-gray-600 font-medium hover:border-accent hover:text-accent transition-all duration-300 focus:outline-none" data-filter="Hospitality">Hospitality</button>
         </div>
 
         <!-- Masonry-like Grid -->
@@ -44,7 +46,7 @@ include 'includes/header.php';
                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6">
                     <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300"><?php echo htmlspecialchars($p['title']); ?></h3>
                     <p class="text-gray-300 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 line-clamp-2"><?php echo htmlspecialchars($p['description']); ?></p>
-                    <button class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Project</button>
+                    <a href="project_details.php?id=<?php echo $p['id']; ?>" class="px-6 py-2 border border-white text-white rounded-full hover:bg-white hover:text-black transition-colors translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">View Project</a>
                 </div>
             </div>
             <?php endforeach; else: ?>
